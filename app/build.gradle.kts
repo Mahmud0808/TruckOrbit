@@ -58,4 +58,5 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation(libs.gson)
     implementation(libs.loading.button.android)
+    implementation(libs.circleimageview)
 }

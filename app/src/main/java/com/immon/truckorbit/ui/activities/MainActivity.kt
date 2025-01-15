@@ -8,6 +8,8 @@ import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.shape.MaterialShapeDrawable
 import com.immon.truckorbit.R
 import com.immon.truckorbit.data.LocalDB
 import com.immon.truckorbit.databinding.ActivityMainBinding
@@ -46,13 +48,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupEdgeToEdge() {
-        //        try {
-        //            val appBarLayout = findViewById<AppBarLayout>(R.id.appBarLayout)
-        //            appBarLayout.statusBarForeground = MaterialShapeDrawable.createWithElevationOverlay(
-        //                applicationContext
-        //            )
-        //        } catch (ignored: Exception) {
-        //        }
+        try {
+            val appBarLayout = findViewById<AppBarLayout>(R.id.appBarLayout)
+            appBarLayout.statusBarForeground = MaterialShapeDrawable.createWithElevationOverlay(
+                applicationContext
+            )
+        } catch (ignored: Exception) {
+        }
 
         val window = window
         WindowCompat.setDecorFitsSystemWindows(window, false)

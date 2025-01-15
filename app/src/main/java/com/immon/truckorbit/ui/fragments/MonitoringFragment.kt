@@ -34,6 +34,7 @@ import com.immon.truckorbit.R
 import com.immon.truckorbit.TruckOrbit.getAppContext
 import com.immon.truckorbit.databinding.FragmentMonitoringBinding
 import com.immon.truckorbit.utils.AnimationQueue
+import com.immon.truckorbit.utils.setLightStatusBar
 
 class MonitoringFragment : Fragment() {
 
@@ -48,6 +49,8 @@ class MonitoringFragment : Fragment() {
     private var lastLocation: LatLng? = null
     private val requestLocationPermission: ActivityResultLauncher<String> =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { hasLocationPermission: Boolean ->
+            startLocationUpdates()
+
             this.loadMapFragment(
                 hasLocationPermission
             )
@@ -56,7 +59,7 @@ class MonitoringFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        startLocationUpdates()
+        requireActivity().window.setLightStatusBar(true)
     }
 
     override fun onCreateView(
@@ -72,6 +75,14 @@ class MonitoringFragment : Fragment() {
 
     private fun askLocationPermission() {
         binding.progressBar.visibility = View.VISIBLE
+
+        if (::locationRequest.isInitialized.not()) {
+            locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 0)
+                .setWaitForAccurateLocation(false)
+                .setMinUpdateIntervalMillis(0)
+                .setMaxUpdateDelayMillis(0)
+                .build()
+        }
 
         val builder = LocationSettingsRequest.Builder()
             .addLocationRequest(locationRequest)
@@ -124,14 +135,6 @@ class MonitoringFragment : Fragment() {
     private fun startLocationUpdates() {
         if (::fusedLocationClient.isInitialized.not()) {
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(getAppContext())
-        }
-
-        if (::locationRequest.isInitialized.not()) {
-            locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 0)
-                .setWaitForAccurateLocation(false)
-                .setMinUpdateIntervalMillis(0)
-                .setMaxUpdateDelayMillis(0)
-                .build()
         }
 
         if (ContextCompat.checkSelfPermission(

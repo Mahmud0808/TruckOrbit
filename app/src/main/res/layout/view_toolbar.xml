@@ -5,6 +5,7 @@
     android:id="@+id/appBarLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:backgroundTint="#031022"
     android:fitsSystemWindows="true"
     app:liftOnScroll="true">
 
@@ -16,8 +17,10 @@
         app:contentInsetStartWithNavigation="0dp"
         app:maxLines="1"
         app:navigationIconTint="?attr/colorOnSurface"
+        app:subtitleTextColor="@color/white"
         app:title="@string/app_name"
         app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge"
+        app:titleTextColor="@color/white"
         app:titleTextEllipsize="end"
         tools:ignore="RtlSymmetry" />
 
