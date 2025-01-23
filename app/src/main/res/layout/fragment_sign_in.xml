@@ -100,6 +100,8 @@
                 android:text="Sign In"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
+                app:finalCornerAngle="120dp"
+                app:initialCornerAngle="120dp"
                 android:textSize="18sp"
                 app:spinning_bar_color="#FFF"
                 app:spinning_bar_padding="6dp"

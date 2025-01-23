@@ -121,6 +121,8 @@
                 android:paddingVertical="16dp"
                 android:text="Sign Up"
                 android:textAllCaps="false"
+                app:finalCornerAngle="120dp"
+                app:initialCornerAngle="120dp"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 app:spinning_bar_color="#FFF"

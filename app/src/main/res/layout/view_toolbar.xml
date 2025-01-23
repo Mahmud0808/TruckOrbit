@@ -16,7 +16,7 @@
         android:paddingEnd="24dp"
         app:contentInsetStartWithNavigation="0dp"
         app:maxLines="1"
-        app:navigationIconTint="?attr/colorOnSurface"
+        app:navigationIconTint="?attr/colorOnSurfaceInverse"
         app:subtitleTextColor="@color/white"
         app:title="@string/app_name"
         app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge"

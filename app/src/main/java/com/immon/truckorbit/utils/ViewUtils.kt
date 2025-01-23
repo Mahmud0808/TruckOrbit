@@ -31,6 +31,7 @@ fun MaterialToolbar.setTitle(
     setTitle(context, context.getString(title), showBackButton)
 }
 
+@Suppress("DEPRECATION")
 fun MaterialToolbar.setTitle(
     context: Context,
     title: String,
@@ -50,6 +51,16 @@ fun MaterialToolbar.setTitle(
         if (showBackButton) {
             setNavigationOnClickListener { activity.onBackPressed() }
         }
+
+        val horizontalPadding =
+            (if (showBackButton) 12 else 28) * resources.displayMetrics.density.toInt()
+
+        setPaddingRelative(
+            horizontalPadding,
+            paddingTop,
+            horizontalPadding,
+            paddingBottom
+        )
     }
 }
 

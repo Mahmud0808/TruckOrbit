@@ -4,9 +4,9 @@
     <color name="semiblack">#B3000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#FF126CFD</color>
-
-
+    <color name="gray">#C0D6FF</color>
     <color name="transparent">#00000000</color>
+
     <color name="md_theme_primary">#415F91</color>
     <color name="md_theme_onPrimary">#FFFFFF</color>
     <color name="md_theme_primaryContainer">#D6E3FF</color>
