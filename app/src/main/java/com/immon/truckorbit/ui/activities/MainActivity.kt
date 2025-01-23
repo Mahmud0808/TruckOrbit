@@ -9,15 +9,14 @@ import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.shape.MaterialShapeDrawable
 import com.immon.truckorbit.R
 import com.immon.truckorbit.data.LocalDB
 import com.immon.truckorbit.databinding.ActivityMainBinding
-import com.immon.truckorbit.ui.fragments.admin.MainFragment
 import com.immon.truckorbit.ui.fragments.LandingFragment
+import com.immon.truckorbit.ui.fragments.admin.MainFragment
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         initializeDummyMap()
-        enableEdgeToEdge()
+        setupEdgeToEdge();
         setContentView(binding.getRoot())
 
         thisFragmentManager = supportFragmentManager
@@ -46,6 +45,11 @@ class MainActivity : AppCompatActivity() {
                 replaceFragment(LandingFragment())
             }
         }
+    }
+
+    private fun setupEdgeToEdge() {
+        enableEdgeToEdge()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
     }
 
     private fun initializeDummyMap() {

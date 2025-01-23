@@ -9,22 +9,18 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.immon.truckorbit.R
 import com.immon.truckorbit.databinding.FragmentTrucksBinding
-import com.immon.truckorbit.utils.setLightStatusBar
+import com.immon.truckorbit.ui.fragments.base.BaseFragment
 import com.immon.truckorbit.utils.setTitle
 
 @Suppress("DEPRECATION")
-class TrucksFragment : Fragment() {
+class TrucksFragment : BaseFragment() {
 
     private lateinit var binding: FragmentTrucksBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        requireActivity().window.setLightStatusBar(true)
-    }
+    override val isLightStatusbar: Boolean
+        get() = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

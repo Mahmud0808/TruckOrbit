@@ -6,14 +6,17 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.immon.truckorbit.databinding.FragmentSignInBinding
 import com.immon.truckorbit.ui.activities.MainActivity.Companion.replaceFragment
 import com.immon.truckorbit.ui.fragments.admin.MainFragment
+import com.immon.truckorbit.ui.fragments.base.BaseFragment
 
-class SignInFragment : Fragment() {
+class SignInFragment : BaseFragment() {
 
     private lateinit var binding: FragmentSignInBinding
+
+    override val isLightStatusbar: Boolean
+        get() = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

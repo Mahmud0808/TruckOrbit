@@ -13,7 +13,6 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -33,10 +32,10 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.immon.truckorbit.R
 import com.immon.truckorbit.TruckOrbit.getAppContext
 import com.immon.truckorbit.databinding.FragmentMonitoringBinding
+import com.immon.truckorbit.ui.fragments.base.BaseFragment
 import com.immon.truckorbit.utils.AnimationQueue
-import com.immon.truckorbit.utils.setLightStatusBar
 
-class MonitoringFragment : Fragment() {
+class MonitoringFragment : BaseFragment() {
 
     private lateinit var binding: FragmentMonitoringBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -53,11 +52,8 @@ class MonitoringFragment : Fragment() {
             loadMapFragment(hasLocationPermission)
         }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        requireActivity().window.setLightStatusBar(true)
-    }
+    override val isLightStatusbar: Boolean
+        get() = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -4,20 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.immon.truckorbit.databinding.FragmentLandingBinding
 import com.immon.truckorbit.ui.activities.MainActivity.Companion.replaceFragment
-import com.immon.truckorbit.utils.setLightStatusBar
+import com.immon.truckorbit.ui.fragments.base.BaseFragment
 
-class LandingFragment : Fragment() {
+class LandingFragment : BaseFragment() {
 
     private lateinit var binding: FragmentLandingBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        requireActivity().window.setLightStatusBar(true)
-    }
+    override val isLightStatusbar: Boolean
+        get() = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
