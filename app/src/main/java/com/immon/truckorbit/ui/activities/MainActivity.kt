@@ -2,6 +2,7 @@ package com.immon.truckorbit.ui.activities
 
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
@@ -33,8 +34,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         initializeDummyMap()
+        enableEdgeToEdge()
         setContentView(binding.getRoot())
-        setupEdgeToEdge()
 
         thisFragmentManager = supportFragmentManager
 
@@ -45,19 +46,6 @@ class MainActivity : AppCompatActivity() {
                 replaceFragment(LandingFragment())
             }
         }
-    }
-
-    private fun setupEdgeToEdge() {
-        try {
-            val appBarLayout = findViewById<AppBarLayout>(R.id.appBarLayout)
-            appBarLayout.statusBarForeground = MaterialShapeDrawable.createWithElevationOverlay(
-                applicationContext
-            )
-        } catch (ignored: Exception) {
-        }
-
-        val window = window
-        WindowCompat.setDecorFitsSystemWindows(window, false)
     }
 
     private fun initializeDummyMap() {

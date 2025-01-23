@@ -1,5 +1,6 @@
 package com.immon.truckorbit.ui.fragments.admin
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -42,7 +43,10 @@ class MainFragment : Fragment() {
         registerOnBackPressedCallback()
     }
 
+    @Suppress("DEPRECATION")
     private fun setupBottomNavigationView() {
+        requireActivity().window.navigationBarColor = Color.parseColor("#F3F5F7")
+
         childFragmentManager.addOnBackStackChangedListener {
             val tag = getTopFragment(childFragmentManager)
 
