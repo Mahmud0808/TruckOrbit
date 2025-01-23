@@ -4,7 +4,8 @@
     <color name="semiblack">#B3000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#FF126CFD</color>
-    <color name="gray">#C0D6FF</color>
+    <color name="light_blue">#C0D6FF</color>
+    <color name="gray">#A3A3A3</color>
     <color name="transparent">#00000000</color>
 
     <color name="md_theme_primary">#415F91</color>
