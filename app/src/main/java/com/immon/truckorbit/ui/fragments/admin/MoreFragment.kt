@@ -1,4 +1,4 @@
-package com.immon.truckorbit.ui.fragments
+package com.immon.truckorbit.ui.fragments.admin
 
 import android.os.Bundle
 import android.view.LayoutInflater

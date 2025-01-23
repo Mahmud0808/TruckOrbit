@@ -1,4 +1,4 @@
-package com.immon.truckorbit.ui.fragments
+package com.immon.truckorbit.ui.fragments.admin
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -132,27 +132,96 @@ class MainFragment : Fragment() {
 
     companion object {
         private var thisFragmentManager: FragmentManager? = null
+        private var currentFragment: Fragment? = null
 
-        val myFragmentManager: FragmentManager
+        private val myFragmentManager: FragmentManager
             get() = thisFragmentManager!!
 
-        fun replaceFragment(fragment: Fragment, slideAnimation: Boolean = false) {
+        enum class SlideDirection {
+            LEFT_TO_RIGHT,
+            RIGHT_TO_LEFT,
+            NONE
+        }
+
+        private fun isInGroup1(fragment: Fragment): Boolean {
+            return fragment is MonitoringFragment
+        }
+
+        private fun isInGroup2(fragment: Fragment): Boolean {
+            return fragment is TrucksFragment
+        }
+
+        private fun isInGroup3(fragment: Fragment): Boolean {
+            return fragment is DriversFragment
+        }
+
+        private fun isInGroup4(fragment: Fragment): Boolean {
+            return fragment is MoreFragment
+        }
+
+        private fun getSlidingDirection(
+            currentFragment: Fragment?,
+            newFragment: Fragment
+        ): SlideDirection {
+            if (currentFragment == null) {
+                return SlideDirection.NONE
+            }
+
+            val direction = if (isInGroup1(currentFragment) && !isInGroup1(newFragment)) {
+                SlideDirection.LEFT_TO_RIGHT
+            } else if (isInGroup4(currentFragment) && !isInGroup4(newFragment)) {
+                SlideDirection.RIGHT_TO_LEFT
+            } else if (isInGroup2(currentFragment)) {
+                if (isInGroup1(newFragment)) {
+                    SlideDirection.RIGHT_TO_LEFT
+                } else if (isInGroup3(newFragment) || isInGroup4(newFragment)) {
+                    SlideDirection.LEFT_TO_RIGHT
+                } else {
+                    return SlideDirection.NONE
+                }
+            } else if (isInGroup3(currentFragment)) {
+                if (isInGroup4(newFragment)) {
+                    SlideDirection.LEFT_TO_RIGHT
+                } else if (isInGroup1(newFragment) || isInGroup2(newFragment)) {
+                    SlideDirection.RIGHT_TO_LEFT
+                } else {
+                    return SlideDirection.NONE
+                }
+            } else {
+                return SlideDirection.NONE
+            }
+
+            return direction
+        }
+
+        fun replaceFragment(
+            fragment: Fragment,
+            slideDirection: SlideDirection = getSlidingDirection(currentFragment, fragment)
+        ) {
             myFragmentManager.beginTransaction().apply {
-                if (slideAnimation) {
-                    setCustomAnimations(
+                when (slideDirection) {
+                    SlideDirection.LEFT_TO_RIGHT -> setCustomAnimations(
                         R.anim.slide_in_enter,
                         R.anim.slide_out_enter,
                         R.anim.slide_in_exit,
                         R.anim.slide_out_exit
                     )
-                } else {
-                    setCustomAnimations(
+
+                    SlideDirection.RIGHT_TO_LEFT -> setCustomAnimations(
+                        R.anim.slide_in_exit,
+                        R.anim.slide_out_exit,
+                        R.anim.slide_in_enter,
+                        R.anim.slide_out_enter
+                    )
+
+                    SlideDirection.NONE -> setCustomAnimations(
                         R.anim.fade_in,
                         R.anim.fade_out,
                         R.anim.fade_in,
                         R.anim.fade_out
                     )
                 }
+
                 replace(R.id.fragmentContainer, fragment)
 
                 when (fragment) {
@@ -182,6 +251,7 @@ class MainFragment : Fragment() {
                 }
 
                 commit()
+                currentFragment = fragment
             }
         }
     }

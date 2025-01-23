@@ -1,17 +1,17 @@
-package com.immon.truckorbit.ui.fragments
+package com.immon.truckorbit.ui.fragments.admin
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.immon.truckorbit.databinding.FragmentOnboardBinding
-import com.immon.truckorbit.ui.activities.MainActivity.Companion.replaceFragment
+import com.immon.truckorbit.databinding.FragmentDriversBinding
 import com.immon.truckorbit.utils.setLightStatusBar
+import com.immon.truckorbit.utils.setTitle
 
-class OnboardFragment : Fragment() {
+class DriversFragment : Fragment() {
 
-    private lateinit var binding: FragmentOnboardBinding
+    private lateinit var binding: FragmentDriversBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,11 +23,9 @@ class OnboardFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentOnboardBinding.inflate(inflater, container, false)
+        binding = FragmentDriversBinding.inflate(inflater, container, false)
 
-        binding.btnNext.setOnClickListener {
-            replaceFragment(SignInFragment(), true)
-        }
+        binding.header.toolbar.setTitle(requireContext(), "Drivers", false)
 
         return binding.root
     }

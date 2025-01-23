@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.immon.truckorbit.databinding.FragmentTrucksBinding
+import com.immon.truckorbit.databinding.FragmentLandingBinding
+import com.immon.truckorbit.ui.activities.MainActivity.Companion.replaceFragment
 import com.immon.truckorbit.utils.setLightStatusBar
-import com.immon.truckorbit.utils.setTitle
 
-class TrucksFragment : Fragment() {
+class LandingFragment : Fragment() {
 
-    private lateinit var binding: FragmentTrucksBinding
+    private lateinit var binding: FragmentLandingBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,9 +23,11 @@ class TrucksFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentTrucksBinding.inflate(inflater, container, false)
+        binding = FragmentLandingBinding.inflate(inflater, container, false)
 
-        binding.header.toolbar.setTitle(requireContext(), "Trucks", false)
+        binding.btnNext.setOnClickListener {
+            replaceFragment(SignInFragment(), true)
+        }
 
         return binding.root
     }

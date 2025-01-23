@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:clipChildren="false"
     android:fillViewport="true"
-    tools:context=".ui.fragments.MainFragment">
+    tools:context=".ui.fragments.admin.MainFragment">
 
     <FrameLayout
         android:id="@+id/fragmentContainer"

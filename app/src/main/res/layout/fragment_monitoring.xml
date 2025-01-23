@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.fragments.MonitoringFragment">
+    tools:context=".ui.fragments.admin.MonitoringFragment">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/map_fragment"

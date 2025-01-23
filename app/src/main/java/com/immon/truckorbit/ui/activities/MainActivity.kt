@@ -13,8 +13,8 @@ import com.google.android.material.shape.MaterialShapeDrawable
 import com.immon.truckorbit.R
 import com.immon.truckorbit.data.LocalDB
 import com.immon.truckorbit.databinding.ActivityMainBinding
-import com.immon.truckorbit.ui.fragments.MainFragment
-import com.immon.truckorbit.ui.fragments.OnboardFragment
+import com.immon.truckorbit.ui.fragments.admin.MainFragment
+import com.immon.truckorbit.ui.fragments.LandingFragment
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 
@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
             if (LocalDB.getBoolean("logged_in", false)) {
                 replaceFragment(MainFragment())
             } else {
-                replaceFragment(OnboardFragment())
+                replaceFragment(LandingFragment())
             }
         }
     }
@@ -119,7 +119,7 @@ class MainActivity : AppCompatActivity() {
                         )
                     }
 
-                    !is OnboardFragment -> {
+                    !is LandingFragment -> {
                         addToBackStack("OnboardFragment")
                     }
                 }

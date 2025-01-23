@@ -1,4 +1,4 @@
-package com.immon.truckorbit.ui.fragments
+package com.immon.truckorbit.ui.fragments.admin
 
 import android.Manifest
 import android.content.IntentSender
@@ -50,10 +50,7 @@ class MonitoringFragment : Fragment() {
     private val requestLocationPermission: ActivityResultLauncher<String> =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { hasLocationPermission: Boolean ->
             startLocationUpdates()
-
-            this.loadMapFragment(
-                hasLocationPermission
-            )
+            loadMapFragment(hasLocationPermission)
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,6 +94,7 @@ class MonitoringFragment : Fragment() {
                 if (exception is ResolvableApiException) {
                     try {
                         exception.startResolutionForResult(requireActivity(), 1)
+                        requestLocationPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
                     } catch (sendEx: IntentSender.SendIntentException) {
                         sendEx.printStackTrace()
                     }
