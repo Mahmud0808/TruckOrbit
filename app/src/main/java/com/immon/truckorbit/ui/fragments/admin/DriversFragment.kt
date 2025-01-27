@@ -1,16 +1,23 @@
 package com.immon.truckorbit.ui.fragments.admin
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.toObject
 import com.immon.truckorbit.R
+import com.immon.truckorbit.data.Constants.USER_DATABASE
+import com.immon.truckorbit.data.enums.AccountTypeModel
+import com.immon.truckorbit.data.models.UserModel
 import com.immon.truckorbit.databinding.FragmentDriversBinding
+import com.immon.truckorbit.ui.adapters.DriverAdapter
 import com.immon.truckorbit.ui.fragments.base.BaseFragment
 import com.immon.truckorbit.utils.setTitle
 
@@ -18,6 +25,9 @@ import com.immon.truckorbit.utils.setTitle
 class DriversFragment : BaseFragment() {
 
     private lateinit var binding: FragmentDriversBinding
+    private lateinit var driverAdapter: DriverAdapter
+    private val firestore = FirebaseFirestore.getInstance()
+    private var driverList = mutableListOf<UserModel>()
 
     override val isLightStatusbar: Boolean
         get() = true
@@ -32,27 +42,70 @@ class DriversFragment : BaseFragment() {
 
         binding.header.toolbar.setTitle(requireContext(), "Drivers", false)
 
-        binding.btnSearchDriver.setOnClickListener {
-            binding.btnSearchDriver.startAnimation {
-                Handler(Looper.getMainLooper()).postDelayed({
-                    binding.recyclerView.visibility = View.VISIBLE
-                    binding.searchDriverContainer.visibility = View.GONE
+        binding.tvNoDrivers.visibility = View.VISIBLE
+        binding.recyclerView.visibility = View.GONE
 
-                    binding.etSearchQuery.text.clear()
+        binding.etSearchQuery.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-                    binding.btnSearchDriver.revertAnimation()
-                }, 2000)
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                filterDrivers(s.toString())
             }
-        }
 
-        binding.btnResetSearch.setOnClickListener {
-            binding.recyclerView.visibility = View.VISIBLE
-            binding.searchDriverContainer.visibility = View.GONE
+            override fun afterTextChanged(s: Editable?) {}
+        })
 
-            binding.etSearchQuery.text.clear()
-        }
+        driverAdapter = DriverAdapter(emptyList())
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.adapter = driverAdapter
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        observeDriversFromFirestore()
+    }
+
+    private fun observeDriversFromFirestore() {
+        firestore.collection(USER_DATABASE).addSnapshotListener { snapshots, exception ->
+            if (exception != null) {
+                exception.printStackTrace()
+                return@addSnapshotListener
+            }
+
+            if (snapshots != null) {
+                driverList.clear()
+                for (document in snapshots) {
+                    val user = document.toObject<UserModel>()
+                    if (user.accountType == AccountTypeModel.DRIVER) {
+                        driverList.add(user)
+                    }
+                }
+                driverAdapter.updateData(driverList)
+
+                if (driverList.isEmpty()) {
+                    binding.tvNoDrivers.visibility = View.VISIBLE
+                    binding.recyclerView.visibility = View.GONE
+                } else {
+                    binding.tvNoDrivers.visibility = View.GONE
+                    binding.recyclerView.visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+
+    private fun filterDrivers(query: String) {
+        if (query.isEmpty()) {
+            driverAdapter.updateData(driverList)
+        } else {
+            val filteredList = driverList.filter {
+                it.name.contains(query, ignoreCase = true) ||
+                        it.email.contains(query, ignoreCase = true)
+            }
+            driverAdapter.updateData(filteredList)
+        }
     }
 
     @Deprecated("Deprecated in Java")

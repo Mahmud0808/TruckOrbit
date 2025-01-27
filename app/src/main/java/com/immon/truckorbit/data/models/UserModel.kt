@@ -2,6 +2,7 @@ package com.immon.truckorbit.data.models
 
 import com.immon.truckorbit.data.enums.AccountStatusModel
 import com.immon.truckorbit.data.enums.AccountTypeModel
+import com.immon.truckorbit.data.enums.DrivingStatusModel
 import java.util.UUID
 
 data class UserModel(
@@ -9,7 +10,8 @@ data class UserModel(
     var name: String,
     var email: String,
     var accountType: AccountTypeModel = AccountTypeModel.DRIVER,
-    var accountStatus: AccountStatusModel = AccountStatusModel.INACTIVE
+    var accountStatus: AccountStatusModel = AccountStatusModel.INACTIVE,
+    var drivingStatus: DrivingStatusModel = DrivingStatusModel.STOPPED
 ) {
     constructor() : this(name = "", email = "")
 }

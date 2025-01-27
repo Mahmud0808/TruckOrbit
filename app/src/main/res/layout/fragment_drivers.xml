@@ -41,53 +41,32 @@
                 android:paddingVertical="16dp"
                 tools:ignore="HardcodedText" />
 
-            <com.github.leandroborgesferreira.loadingbutton.customViews.CircularProgressButton
-                android:id="@+id/btn_search_driver"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:backgroundTint="@color/blue"
-                android:paddingHorizontal="18dp"
-                android:paddingVertical="16dp"
-                android:text="Search"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                app:finalCornerAngle="120dp"
-                app:initialCornerAngle="120dp"
-                app:spinning_bar_color="#FFF"
-                app:spinning_bar_padding="6dp"
-                app:spinning_bar_width="4dp" />
-
-            <com.github.leandroborgesferreira.loadingbutton.customViews.CircularProgressButton
-                android:id="@+id/btn_reset_search"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:backgroundTint="@color/light_blue"
-                android:paddingHorizontal="18dp"
-                android:paddingVertical="16dp"
-                android:text="Reset Search"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                app:finalCornerAngle="120dp"
-                app:initialCornerAngle="120dp"
-                app:spinning_bar_color="#FFF"
-                app:spinning_bar_padding="6dp"
-                app:spinning_bar_width="4dp" />
-
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:listitem="@layout/list_item_driver_list" />
+            android:layout_height="match_parent">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                tools:listitem="@layout/list_item_driver_list" />
+
+            <TextView
+                android:id="@+id/tv_no_drivers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="24dp"
+                android:text="No Drivers Found"
+                android:textColor="@color/semiblack"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+        </FrameLayout>
     </LinearLayout>
 
     <include
