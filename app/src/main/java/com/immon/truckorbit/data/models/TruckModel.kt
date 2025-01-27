@@ -8,7 +8,9 @@ data class TruckModel(
     var id: String = UUID.randomUUID().toString(),
     var truckName: String,
     var licenseNo: String,
-    var driver: UserModel,
+    var currentDriver: UserModel? = null,
     var drivingStatus: DrivingStatusModel = DrivingStatusModel.STOPPED,
     var location: LatLng? = null
-)
+) {
+    constructor() : this(truckName = "", licenseNo = "")
+}

@@ -10,4 +10,6 @@ data class UserModel(
     var email: String,
     var accountType: AccountTypeModel = AccountTypeModel.DRIVER,
     var accountStatus: AccountStatusModel = AccountStatusModel.INACTIVE
-)
+) {
+    constructor() : this(name = "", email = "")
+}
