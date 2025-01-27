@@ -39,9 +39,13 @@ class MainActivity : AppCompatActivity() {
         thisFragmentManager = supportFragmentManager
 
         if (savedInstanceState == null) {
-            if (LocalDB.getBoolean("logged_in", false)) {
-                replaceFragment(MainFragment())
-            } else {
+            if (LocalDB.getBoolean("logged_in", false)) { // logged in
+                if (LocalDB.getBoolean("is_admin", false)) { // admin
+                    replaceFragment(MainFragment())
+                } else { // driver
+                    replaceFragment(LandingFragment())
+                }
+            } else { // not logged in
                 replaceFragment(LandingFragment())
             }
         }
