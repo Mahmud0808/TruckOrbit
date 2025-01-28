@@ -14,6 +14,7 @@ import com.immon.truckorbit.data.LocalDB
 import com.immon.truckorbit.databinding.ActivityMainBinding
 import com.immon.truckorbit.ui.fragments.LandingFragment
 import com.immon.truckorbit.ui.fragments.admin.MainFragment
+import com.immon.truckorbit.ui.fragments.driver.HomeFragment
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 
@@ -43,7 +44,7 @@ class MainActivity : AppCompatActivity() {
                 if (LocalDB.getBoolean("is_admin", false)) { // admin
                     replaceFragment(MainFragment())
                 } else { // driver
-                    replaceFragment(LandingFragment())
+                    replaceFragment(HomeFragment())
                 }
             } else { // not logged in
                 replaceFragment(LandingFragment())
@@ -108,7 +109,7 @@ class MainActivity : AppCompatActivity() {
                 replace(R.id.fragmentContainer, fragment)
 
                 when (fragment) {
-                    is MainFragment -> {
+                    is MainFragment, is HomeFragment -> {
                         myFragmentManager.popBackStack(
                             null,
                             FragmentManager.POP_BACK_STACK_INCLUSIVE

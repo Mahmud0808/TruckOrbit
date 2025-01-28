@@ -19,6 +19,7 @@ import com.immon.truckorbit.databinding.FragmentSignInBinding
 import com.immon.truckorbit.ui.activities.MainActivity.Companion.replaceFragment
 import com.immon.truckorbit.ui.fragments.admin.MainFragment
 import com.immon.truckorbit.ui.fragments.base.BaseFragment
+import com.immon.truckorbit.ui.fragments.driver.HomeFragment
 
 
 class SignInFragment : BaseFragment() {
@@ -93,11 +94,7 @@ class SignInFragment : BaseFragment() {
                                             when (accountType) {
                                                 AccountTypeModel.DRIVER -> {
                                                     LocalDB.putBoolean("is_admin", false)
-                                                    Toast.makeText(
-                                                        context,
-                                                        "Logged in as DRIVER",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
+                                                    replaceFragment(HomeFragment())
                                                 }
 
                                                 AccountTypeModel.ADMIN -> {
