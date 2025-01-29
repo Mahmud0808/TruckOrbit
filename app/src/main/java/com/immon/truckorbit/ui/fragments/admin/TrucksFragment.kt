@@ -104,7 +104,11 @@ class TrucksFragment : BaseFragment() {
         val licensePlate = binding.etLicensePlate.text.toString().trim()
 
         if (truckCompany.isEmpty() || licensePlate.isEmpty()) {
-            Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                requireContext(),
+                "Please fill in all fields",
+                Toast.LENGTH_SHORT
+            ).show()
             binding.btnAddTruck.revertAnimation()
             return
         }
@@ -114,14 +118,17 @@ class TrucksFragment : BaseFragment() {
             licenseNo = licensePlate
         )
 
-        firestore.collection(TRUCK_DATABASE).add(newTruck)
+        firestore.collection(TRUCK_DATABASE).document(newTruck.id).set(newTruck)
             .addOnSuccessListener {
                 binding.btnAddTruck.revertAnimation()
                 binding.etTruckCompany.text.clear()
                 binding.etLicensePlate.text.clear()
 
-                Toast.makeText(requireContext(), "Truck added successfully", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(
+                    requireContext(),
+                    "Truck added successfully",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             .addOnFailureListener { exception ->
                 binding.btnAddTruck.revertAnimation()
