@@ -244,7 +244,7 @@ class LocationSharingFragment : BaseFragment() {
             isTrafficEnabled = false
             isIndoorEnabled = false
             isBuildingsEnabled = true
-            uiSettings.isZoomControlsEnabled = true
+            uiSettings.isZoomControlsEnabled = false
             uiSettings.isMapToolbarEnabled = false
         }
 
