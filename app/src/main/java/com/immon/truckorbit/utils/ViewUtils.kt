@@ -13,8 +13,8 @@ import com.google.android.material.appbar.MaterialToolbar
 fun View.applyWindowInsets(top: Boolean, bottom: Boolean) {
     ViewCompat.setOnApplyWindowInsetsListener(this) { v: View, insets: WindowInsetsCompat ->
         val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-        val paddingTop = if (top) systemBars.top + paddingTop else paddingTop
-        val paddingBottom = if (bottom) systemBars.bottom + paddingBottom else paddingBottom
+        val paddingTop = if (top) systemBars.top else paddingTop
+        val paddingBottom = if (bottom) systemBars.bottom else paddingBottom
         val paddingLeft = systemBars.left + paddingLeft
         val paddingRight = systemBars.right + paddingRight
 

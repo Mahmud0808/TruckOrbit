@@ -2,6 +2,9 @@ package com.immon.truckorbit.ui.fragments.driver
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -10,6 +13,7 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
+import com.immon.truckorbit.R
 import com.immon.truckorbit.data.Constants.TRUCK_DATABASE
 import com.immon.truckorbit.data.Constants.USER_DATABASE
 import com.immon.truckorbit.data.LocalDB
@@ -17,8 +21,11 @@ import com.immon.truckorbit.data.enums.DrivingStatusModel
 import com.immon.truckorbit.data.models.TruckModel
 import com.immon.truckorbit.data.models.UserModel
 import com.immon.truckorbit.databinding.FragmentHomeBinding
+import com.immon.truckorbit.ui.activities.MainActivity.Companion.replaceFragment
+import com.immon.truckorbit.ui.fragments.LandingFragment
 import com.immon.truckorbit.ui.fragments.base.BaseFragment
 
+@Suppress("DEPRECATION")
 class HomeFragment : BaseFragment() {
 
     private lateinit var binding: FragmentHomeBinding
@@ -41,6 +48,8 @@ class HomeFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        setHasOptionsMenu(true)
 
         fetchTrucks { truckList ->
             val truckNames = truckList.map { it.truckName }
@@ -122,34 +131,20 @@ class HomeFragment : BaseFragment() {
                 ?: throw IllegalStateException("User not found")
 
             if (truckModel.currentDriver != null) {
-                Toast.makeText(
-                    requireContext(),
-                    "Truck is already assigned to another driver",
-                    Toast.LENGTH_SHORT
-                ).show()
-                return@runTransaction
+                throw IllegalStateException("Truck is already assigned to another driver")
             }
 
-            if (truckModel.drivingStatus != DrivingStatusModel.IDLE) {
-                Toast.makeText(
-                    requireContext(),
-                    "Truck is already moving",
-                    Toast.LENGTH_SHORT
-                ).show()
-                return@runTransaction
+            if (truckModel.drivingStatus != DrivingStatusModel.STOPPED) {
+                throw IllegalStateException("Truck is already moving")
             }
 
-            if (userModel.drivingStatus != DrivingStatusModel.IDLE) {
-                Toast.makeText(
-                    requireContext(),
-                    "User is already driving",
-                    Toast.LENGTH_SHORT
-                ).show()
-                return@runTransaction
+            if (userModel.drivingStatus != DrivingStatusModel.STOPPED) {
+                throw IllegalStateException("User is already driving")
             }
 
             truckModel.currentDriver = userModel
             truckModel.drivingStatus = DrivingStatusModel.IDLE
+            truckModel.destination = binding.etDestination.text.toString().trim()
 
             userModel.drivingStatus = DrivingStatusModel.IDLE
 
@@ -157,11 +152,12 @@ class HomeFragment : BaseFragment() {
             transaction.set(userDocRef, userModel)
         }.addOnSuccessListener {
             binding.btnGetStarted.revertAnimation()
-            Toast.makeText(
-                requireContext(),
-                "Truck assigned to driver successfully",
-                Toast.LENGTH_SHORT
-            ).show()
+
+            replaceFragment(LocationSharingFragment().apply {
+                arguments = Bundle().apply {
+                    putString("selectedTruckId", selectedTruckId.toString())
+                }
+            })
         }.addOnFailureListener { exception ->
             binding.btnGetStarted.revertAnimation()
             exception.printStackTrace()
@@ -171,5 +167,56 @@ class HomeFragment : BaseFragment() {
                 Toast.LENGTH_LONG
             ).show()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        binding.btnGetStarted.isEnabled = false
+
+        firestore.collection(TRUCK_DATABASE)
+            .whereEqualTo("currentDriver.id", currentUserId)
+            .get()
+            .addOnSuccessListener { documents ->
+                val assignedTrucks = documents.mapNotNull { it.toObject(TruckModel::class.java) }
+
+                if (assignedTrucks.isNotEmpty()) {
+                    replaceFragment(LocationSharingFragment().apply {
+                        arguments = Bundle().apply {
+                            putString("selectedTruckId", assignedTrucks.first().id)
+                        }
+                    })
+                } else {
+                    binding.btnGetStarted.isEnabled = true
+                }
+            }
+            .addOnFailureListener { exception ->
+                exception.printStackTrace()
+            }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.top_corner_menu_driver_home, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    @Deprecated(
+        "Deprecated in Java",
+        ReplaceWith(
+            "super.onOptionsItemSelected(item)",
+            "androidx.fragment.app.Fragment"
+        )
+    )
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.logout -> {
+                LocalDB.putBoolean("logged_in", false)
+
+                replaceFragment(LandingFragment())
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 }
