@@ -24,6 +24,7 @@ import com.immon.truckorbit.databinding.FragmentHomeBinding
 import com.immon.truckorbit.ui.activities.MainActivity.Companion.replaceFragment
 import com.immon.truckorbit.ui.fragments.LandingFragment
 import com.immon.truckorbit.ui.fragments.base.BaseFragment
+import com.immon.truckorbit.utils.setTitle
 
 @Suppress("DEPRECATION")
 class HomeFragment : BaseFragment() {
@@ -50,6 +51,8 @@ class HomeFragment : BaseFragment() {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         setHasOptionsMenu(true)
+
+        binding.header.toolbar.setTitle(requireContext(), R.string.app_name, false)
 
         fetchTrucks { truckList ->
             val truckNames = truckList.map { it.truckName }
@@ -106,6 +109,7 @@ class HomeFragment : BaseFragment() {
                 "Please select a truck first",
                 Toast.LENGTH_SHORT
             ).show()
+            binding.btnGetStarted.revertAnimation()
             return
         }
 
@@ -115,6 +119,7 @@ class HomeFragment : BaseFragment() {
                 "Please enter a destination",
                 Toast.LENGTH_SHORT
             ).show()
+            binding.btnGetStarted.revertAnimation()
             return
         }
 
