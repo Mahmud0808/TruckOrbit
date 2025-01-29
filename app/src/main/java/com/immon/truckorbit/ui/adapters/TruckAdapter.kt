@@ -34,7 +34,9 @@ class TruckAdapter(private var truckList: List<TruckModel>) :
     override fun onBindViewHolder(holder: TruckViewHolder, position: Int) {
         val truck = truckList[position]
         holder.truckName.text = truck.truckName
-        holder.driverName.text = truck.currentDriver?.name ?: "No driver assigned"
+        holder.driverName.text =
+            if (truck.currentDriver?.name != null) "${truck.currentDriver?.name} is driving"
+            else "No driver assigned"
 
         holder.drivingStatus.text = when (truck.drivingStatus) {
             DrivingStatusModel.DRIVING -> "Moving"

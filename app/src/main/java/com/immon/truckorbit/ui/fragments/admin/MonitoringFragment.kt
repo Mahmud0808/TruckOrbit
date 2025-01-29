@@ -26,14 +26,20 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.firestore.FirebaseFirestore
 import com.immon.truckorbit.R
 import com.immon.truckorbit.TruckOrbit.getAppContext
+import com.immon.truckorbit.data.Constants.TRUCK_DATABASE
+import com.immon.truckorbit.data.enums.DrivingStatusModel
+import com.immon.truckorbit.data.models.TruckModel
 import com.immon.truckorbit.databinding.FragmentMonitoringBinding
 import com.immon.truckorbit.ui.fragments.base.BaseFragment
 import com.immon.truckorbit.utils.AnimationQueue
+import com.immon.truckorbit.utils.DrawableUtils.drawableToBitmap
 
 class MonitoringFragment : BaseFragment() {
 
@@ -42,6 +48,7 @@ class MonitoringFragment : BaseFragment() {
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
     private lateinit var animationQueue: AnimationQueue
+    private val firestore = FirebaseFirestore.getInstance()
     private var googleMap: GoogleMap? = null
     private var currentMarker: Marker? = null
     private var markerLoadedFirstTime = true
@@ -51,6 +58,8 @@ class MonitoringFragment : BaseFragment() {
             startLocationUpdates()
             loadMapFragment(hasLocationPermission)
         }
+    private val truckMarkers = mutableMapOf<String, Marker>()
+    private val animationQueues = mutableMapOf<String, AnimationQueue>()
 
     override val isLightStatusbar: Boolean
         get() = false
@@ -141,6 +150,7 @@ class MonitoringFragment : BaseFragment() {
                     for (location in locationResult.locations) {
                         updateMapLocation(location = location)
                     }
+                    listenForTruckUpdates()
                 }
             }
 
@@ -182,6 +192,71 @@ class MonitoringFragment : BaseFragment() {
                 val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latlng, 15f)
                 googleMap!!.animateCamera(cameraUpdate)
                 markerLoadedFirstTime = false
+            }
+        }
+    }
+
+    private fun listenForTruckUpdates() {
+        firestore.collection(TRUCK_DATABASE)
+            .whereNotEqualTo("drivingStatus", DrivingStatusModel.STOPPED.name)
+            .addSnapshotListener { querySnapshot, exception ->
+                if (exception != null) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Error fetching truck data: ${exception.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@addSnapshotListener
+                }
+
+                val truckList = mutableListOf<TruckModel>()
+                for (document in querySnapshot?.documents ?: emptyList()) {
+                    val truck = document.toObject(TruckModel::class.java)
+                    if (truck?.location != null) {
+                        truckList.add(truck)
+                    }
+                }
+                updateTruckMarkersOnMap(truckList)
+            }
+    }
+
+    private fun updateTruckMarkersOnMap(truckList: List<TruckModel>) {
+        if (context == null) return
+
+        val drawable = ContextCompat.getDrawable(
+            requireContext(),
+            R.drawable.ic_truck_marker
+        )
+        val bitmap = drawable.drawableToBitmap()
+
+        truckList.forEach { truck ->
+            truck.location?.let { latLng ->
+                val latlng = LatLng(latLng.latitude, latLng.longitude)
+                val markerOptions = MarkerOptions()
+                    .position(latlng)
+                    .title(truck.truckName)
+                    .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
+
+                var truckMarker = truckMarkers[truck.id]
+
+                if (truckMarker == null) {
+                    truckMarker = googleMap?.addMarker(markerOptions)
+                    truckMarker?.tag = truck.id
+                    truckMarker?.let {
+                        truckMarkers[truck.id] = it
+                    }
+                }
+
+                if (animationQueues[truck.id] == null) {
+                    animationQueues[truck.id] = AnimationQueue(
+                        startPosition = latlng,
+                        scope = lifecycleScope,
+                    ) { updatedPosition ->
+                        truckMarker?.position = updatedPosition
+                    }
+                } else {
+                    animationQueues[truck.id]!!.addToQueue(latlng, threshold = 0f)
+                }
             }
         }
     }

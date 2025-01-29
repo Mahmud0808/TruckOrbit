@@ -4,8 +4,8 @@ import java.util.UUID
 
 data class LatLngModel(
     var id: String = UUID.randomUUID().toString(),
-    var latitude: Double? = null,
-    var longitude: Double? = null
+    var latitude: Double,
+    var longitude: Double
 ) {
-    constructor() : this(latitude = null, longitude = null)
+    constructor() : this(latitude = 0.0, longitude = 0.0)
 }

@@ -37,9 +37,9 @@ class DriverAdapter(private var driverList: List<UserModel>) :
         holder.driverMail.text = driver.email
 
         holder.drivingStatus.text = when (driver.drivingStatus) {
-            DrivingStatusModel.DRIVING -> "Moving"
+            DrivingStatusModel.DRIVING -> "Driving"
             DrivingStatusModel.IDLE -> "Idle"
-            DrivingStatusModel.STOPPED -> "Stopped"
+            DrivingStatusModel.STOPPED -> "Offline"
         }
 
         holder.statusIndicator.backgroundTintList = ColorStateList.valueOf(
