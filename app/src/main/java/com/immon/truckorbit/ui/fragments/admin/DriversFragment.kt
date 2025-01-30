@@ -18,6 +18,7 @@ import com.immon.truckorbit.data.enums.AccountTypeModel
 import com.immon.truckorbit.data.models.UserModel
 import com.immon.truckorbit.databinding.FragmentDriversBinding
 import com.immon.truckorbit.ui.adapters.DriverAdapter
+import com.immon.truckorbit.ui.fragments.admin.MainFragment.Companion.replaceFragment
 import com.immon.truckorbit.ui.fragments.base.BaseFragment
 import com.immon.truckorbit.utils.setTitle
 
@@ -55,7 +56,13 @@ class DriversFragment : BaseFragment() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        driverAdapter = DriverAdapter(emptyList())
+        driverAdapter = DriverAdapter(driverList = emptyList()) {
+            replaceFragment(DriverInfoFragment().apply {
+                arguments = Bundle().apply {
+                    putString("driverId", it)
+                }
+            })
+        }
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = driverAdapter
 

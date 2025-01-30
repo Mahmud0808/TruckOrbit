@@ -12,8 +12,10 @@ import com.immon.truckorbit.R
 import com.immon.truckorbit.data.enums.DrivingStatusModel
 import com.immon.truckorbit.data.models.UserModel
 
-class DriverAdapter(private var driverList: List<UserModel>) :
-    RecyclerView.Adapter<DriverAdapter.DriverViewHolder>() {
+class DriverAdapter(
+    private var driverList: List<UserModel>,
+    private val onItemClick: (String) -> Unit
+) : RecyclerView.Adapter<DriverAdapter.DriverViewHolder>() {
 
     class DriverViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val driverName: TextView = itemView.findViewById(R.id.tv_driver_name)
@@ -45,10 +47,14 @@ class DriverAdapter(private var driverList: List<UserModel>) :
         holder.statusIndicator.backgroundTintList = ColorStateList.valueOf(
             when (driver.drivingStatus) {
                 DrivingStatusModel.DRIVING -> Color.GREEN
-                DrivingStatusModel.IDLE -> Color.YELLOW
+                DrivingStatusModel.IDLE -> Color.BLUE
                 DrivingStatusModel.STOPPED -> Color.RED
             }
         )
+
+        holder.itemView.setOnClickListener {
+            onItemClick(driver.id)
+        }
     }
 
     override fun getItemCount(): Int = driverList.size

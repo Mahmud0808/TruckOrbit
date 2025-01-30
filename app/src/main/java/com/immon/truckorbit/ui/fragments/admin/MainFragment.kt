@@ -156,7 +156,8 @@ class MainFragment : Fragment() {
         }
 
         private fun isInGroup3(fragment: Fragment): Boolean {
-            return fragment is DriversFragment
+            return fragment is DriversFragment ||
+                    fragment is DriverInfoFragment
         }
 
         private fun isInGroup4(fragment: Fragment): Boolean {
