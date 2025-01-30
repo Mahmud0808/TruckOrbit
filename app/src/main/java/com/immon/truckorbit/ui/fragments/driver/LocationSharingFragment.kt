@@ -299,17 +299,15 @@ class LocationSharingFragment : BaseFragment() {
                 ) { updatedPosition ->
                     currentMarker?.position = updatedPosition
                 }
+                markerLoadedFirstTime = false
             } else {
                 animationQueue.addToQueue(latlng, threshold = 0f)
             }
 
             lastLocation = latlng
 
-            if (markerLoadedFirstTime) {
-                val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latlng, 15f)
-                googleMap!!.animateCamera(cameraUpdate)
-                markerLoadedFirstTime = false
-            }
+            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latlng, 15f)
+            googleMap!!.animateCamera(cameraUpdate)
         }
     }
 
