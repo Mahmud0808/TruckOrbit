@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.immon.truckorbit.data.Constants.DEV_MAIL_ADDRESS
 import com.immon.truckorbit.data.LocalDB
 import com.immon.truckorbit.databinding.FragmentMoreBinding
 import com.immon.truckorbit.ui.activities.MainActivity
@@ -50,6 +51,23 @@ class MoreFragment : BaseFragment() {
         }
         binding.showAdminsLayout.setOnClickListener {
             binding.showAdminsSwitch.performClick()
+        }
+
+        binding.dashboardLayout.setOnClickListener {
+            // TODO: Add dashboard
+        }
+
+        binding.reportIssueLayout.setOnClickListener {
+            try {
+                startActivity(
+                    Intent(Intent.ACTION_VIEW, Uri.parse("mailto:$DEV_MAIL_ADDRESS")).apply {
+                        putExtra(Intent.EXTRA_SUBJECT, "Bug report for Truck Orbit")
+                        putExtra(Intent.EXTRA_TEXT, "Please describe the bug here")
+                    }
+                )
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Unable to send mail", Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.privacyLayout.setOnClickListener {

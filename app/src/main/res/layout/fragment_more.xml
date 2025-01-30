@@ -53,13 +53,13 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#F2F4F5">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="#F2F4F5"
             android:orientation="vertical"
             android:paddingVertical="8dp">
 
@@ -156,6 +156,7 @@
                     android:background="#F2F4F5" />
 
                 <LinearLayout
+                    android:id="@+id/dashboard_layout"
                     android:foreground="?android:selectableItemBackground"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -197,6 +198,7 @@
                     android:background="#F2F4F5" />
 
                 <LinearLayout
+                    android:id="@+id/report_issue_layout"
                     android:foreground="?android:selectableItemBackground"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -217,7 +219,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Reports"
+                        android:text="Report Issue"
                         android:textColor="@color/black"
                         android:textSize="18sp" />
 
