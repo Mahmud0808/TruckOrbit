@@ -189,7 +189,7 @@ class MonitoringFragment : BaseFragment() {
             lastLocation = latlng
 
             if (markerLoadedFirstTime) {
-                val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latlng, 15f)
+                val cameraUpdate = CameraUpdateFactory.newLatLngZoom(latlng, 12f)
                 googleMap!!.animateCamera(cameraUpdate)
                 markerLoadedFirstTime = false
             }
