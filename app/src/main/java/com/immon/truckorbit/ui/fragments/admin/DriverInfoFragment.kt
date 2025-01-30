@@ -9,7 +9,6 @@ import android.view.animation.LinearInterpolator
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.immon.truckorbit.R
@@ -17,6 +16,7 @@ import com.immon.truckorbit.data.Constants.TRUCK_DATABASE
 import com.immon.truckorbit.data.Constants.USER_DATABASE
 import com.immon.truckorbit.data.enums.AccountStatusModel
 import com.immon.truckorbit.data.enums.AccountTypeModel
+import com.immon.truckorbit.data.enums.DrivingStatusModel
 import com.immon.truckorbit.data.models.TruckModel
 import com.immon.truckorbit.data.models.UserModel
 import com.immon.truckorbit.databinding.FragmentDriverInfoBinding
@@ -27,10 +27,18 @@ class DriverInfoFragment : BaseFragment() {
 
     private lateinit var binding: FragmentDriverInfoBinding
     private val firestore = FirebaseFirestore.getInstance()
-    private val userId = FirebaseAuth.getInstance().currentUser?.uid!!
+    private lateinit var userId: String
 
     override val isLightStatusbar: Boolean
         get() = true
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        arguments?.let {
+            userId = it.getString("driverId", "")
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -149,6 +157,11 @@ class DriverInfoFragment : BaseFragment() {
             if (user.accountType == AccountTypeModel.DRIVER) "Driver" else "Admin"
         binding.tvAccountStatus.text =
             if (user.accountStatus == AccountStatusModel.ACTIVE) "Active" else "Inactive"
+        binding.tvDrivingStatus.text = when (user.drivingStatus) {
+            DrivingStatusModel.DRIVING -> "Driving"
+            DrivingStatusModel.IDLE -> "Idle"
+            DrivingStatusModel.STOPPED -> "Offline"
+        }
         binding.tvAccountType.setTextColor(
             if (user.accountType == AccountTypeModel.DRIVER)
                 Color.BLUE
@@ -161,18 +174,20 @@ class DriverInfoFragment : BaseFragment() {
             else
                 Color.RED
         )
-        binding.profileImage.setImageDrawable(
-            if (user.accountType == AccountTypeModel.DRIVER)
-                ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.img_driver_profile_picture_placeholder
-                )
-            else
-                ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.img_admin_profile_picture_placeholder
-                )
-        )
+        if (context != null) {
+            binding.profileImage.setImageDrawable(
+                if (user.accountType == AccountTypeModel.DRIVER)
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.img_driver_profile_picture_placeholder
+                    )
+                else
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.img_admin_profile_picture_placeholder
+                    )
+            )
+        }
     }
 
     private fun updateTruckUI(truck: TruckModel?) {
