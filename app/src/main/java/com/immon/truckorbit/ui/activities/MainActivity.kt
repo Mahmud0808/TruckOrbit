@@ -1,11 +1,12 @@
 package com.immon.truckorbit.ui.activities
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.google.android.gms.maps.SupportMapFragment
@@ -17,7 +18,6 @@ import com.immon.truckorbit.ui.fragments.admin.MainFragment
 import com.immon.truckorbit.ui.fragments.driver.HomeFragment
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -53,8 +53,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupEdgeToEdge() {
-        enableEdgeToEdge()
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        enableEdgeToEdge(
+            navigationBarStyle = SystemBarStyle.light(
+                Color.TRANSPARENT,
+                Color.TRANSPARENT
+            )
+        )
     }
 
     private fun initializeDummyMap() {
