@@ -5,8 +5,11 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.Toast
 import com.google.android.gms.tasks.Task
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
@@ -45,6 +48,10 @@ class SignInFragment : BaseFragment() {
 
         binding.txtCreateAccount.setOnClickListener {
             replaceFragment(SignUpFragment(), true)
+        }
+
+        binding.tvForgotPassword.setOnClickListener {
+            showResetPasswordDialog()
         }
 
         return binding.root
@@ -125,6 +132,62 @@ class SignInFragment : BaseFragment() {
                     Toast.makeText(
                         context,
                         "Login failed: " + task.exception?.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+    }
+
+    private fun showResetPasswordDialog() {
+        val editText = EditText(requireContext()).apply {
+            hint = "Enter your email"
+            layoutParams = FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                marginStart = (18 * requireContext().resources.displayMetrics.density).toInt()
+                marginEnd = (18 * requireContext().resources.displayMetrics.density).toInt()
+            }
+        }
+
+        val container = FrameLayout(requireContext()).apply {
+            addView(editText)
+        }
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Reset Password")
+            .setMessage("Enter your email to receive a password reset link.")
+            .setView(container)
+            .setPositiveButton("Send") { _, _ ->
+                val email = editText.text.toString().trim()
+
+                if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    sendPasswordResetEmail(email)
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "Invalid email address",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun sendPasswordResetEmail(email: String) {
+        mAuth.sendPasswordResetEmail(email)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Reset link sent to $email",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "Failed: ${task.exception?.message}",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
