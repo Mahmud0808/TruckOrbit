@@ -84,10 +84,10 @@
         </LinearLayout>
     </LinearLayout>
 
-    <View
+    <include
+        layout="@layout/view_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginHorizontal="24dp"
-        android:background="#33000000" />
+        android:layout_marginHorizontal="24dp" />
 
 </LinearLayout>
