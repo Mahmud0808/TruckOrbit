@@ -193,6 +193,7 @@ class DriverInfoFragment : BaseFragment() {
     private fun updateTruckUI(truck: TruckModel?) {
         binding.tvVehicleName.text = truck?.truckName ?: "N/A"
         binding.tvVehicleLicense.text = truck?.licenseNo ?: "N/A"
+        binding.tvGoingTo.text = truck?.destination ?: "N/A"
     }
 
     private fun toast(message: String) {
