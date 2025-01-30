@@ -47,7 +47,7 @@ class TruckAdapter(private var truckList: List<TruckModel>) :
         holder.statusIndicator.backgroundTintList = ColorStateList.valueOf(
             when (truck.drivingStatus) {
                 DrivingStatusModel.DRIVING -> Color.GREEN
-                DrivingStatusModel.IDLE -> Color.YELLOW
+                DrivingStatusModel.IDLE -> Color.BLUE
                 DrivingStatusModel.STOPPED -> Color.RED
             }
         )
