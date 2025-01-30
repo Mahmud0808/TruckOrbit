@@ -70,6 +70,8 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/show_idle_trucks_layout"
+                    android:foreground="?android:selectableItemBackground"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -111,6 +113,8 @@
                     android:background="#F2F4F5" />
 
                 <LinearLayout
+                    android:id="@+id/show_admins_layout"
+                    android:foreground="?android:selectableItemBackground"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -152,6 +156,7 @@
                     android:background="#F2F4F5" />
 
                 <LinearLayout
+                    android:foreground="?android:selectableItemBackground"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -192,6 +197,7 @@
                     android:background="#F2F4F5" />
 
                 <LinearLayout
+                    android:foreground="?android:selectableItemBackground"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -233,6 +239,8 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/privacy_layout"
+                    android:foreground="?android:selectableItemBackground"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -252,7 +260,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Language"
+                        android:text="Privacy Policy"
                         android:textColor="@color/black"
                         android:textSize="18sp" />
 
@@ -266,6 +274,8 @@
                     android:background="#F2F4F5" />
 
                 <LinearLayout
+                    android:id="@+id/help_layout"
+                    android:foreground="?android:selectableItemBackground"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -293,6 +303,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:foreground="?android:selectableItemBackground"
                 android:id="@+id/logout_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
