@@ -17,6 +17,7 @@ import com.immon.truckorbit.R
 import com.immon.truckorbit.data.Constants.TRUCK_DATABASE
 import com.immon.truckorbit.data.Constants.USER_DATABASE
 import com.immon.truckorbit.data.LocalDB
+import com.immon.truckorbit.data.enums.AccountStatusModel
 import com.immon.truckorbit.data.enums.DrivingStatusModel
 import com.immon.truckorbit.data.models.TruckModel
 import com.immon.truckorbit.data.models.UserModel
@@ -33,7 +34,7 @@ class HomeFragment : BaseFragment() {
     private val firestore = FirebaseFirestore.getInstance()
     private val firebaseAuth = FirebaseAuth.getInstance()
     private var selectedTruckId: String? = null
-    private var currentUserId = firebaseAuth.currentUser?.uid
+    private var currentUserId = firebaseAuth.currentUser?.uid!!
 
     override val isLightStatusbar: Boolean
         get() = true
@@ -124,7 +125,7 @@ class HomeFragment : BaseFragment() {
         }
 
         val truckDocRef = firestore.collection(TRUCK_DATABASE).document(selectedTruckId!!)
-        val userDocRef = firestore.collection(USER_DATABASE).document(currentUserId!!)
+        val userDocRef = firestore.collection(USER_DATABASE).document(currentUserId)
 
         firestore.runTransaction { transaction ->
             val truckSnapshot = transaction.get(truckDocRef)
@@ -177,27 +178,62 @@ class HomeFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
 
+        binding.spinnerTrucks.isEnabled = false
+        binding.etDestination.isEnabled = false
         binding.btnGetStarted.isEnabled = false
+        binding.btnGetStarted.alpha = 0.5f
 
-        firestore.collection(TRUCK_DATABASE)
-            .whereEqualTo("currentDriver.id", currentUserId)
-            .get()
-            .addOnSuccessListener { documents ->
-                val assignedTrucks = documents.mapNotNull { it.toObject(TruckModel::class.java) }
+        val userDocRef = firestore.collection(USER_DATABASE).document(currentUserId)
 
-                if (assignedTrucks.isNotEmpty()) {
-                    replaceFragment(LocationSharingFragment().apply {
-                        arguments = Bundle().apply {
-                            putString("selectedTruckId", assignedTrucks.first().id)
+        userDocRef.addSnapshotListener { document, error ->
+            if (error != null) {
+                error.printStackTrace()
+                return@addSnapshotListener
+            }
+
+            if (document != null && document.exists()) {
+                val user = document.toObject(UserModel::class.java)
+
+                if (user?.accountStatus == AccountStatusModel.ACTIVE) {
+                    binding.cardAwaitingApproval.visibility = View.GONE
+                    binding.spinnerTrucks.isEnabled = true
+                    binding.etDestination.isEnabled = true
+
+                    firestore.collection(TRUCK_DATABASE)
+                        .whereEqualTo("currentDriver.id", currentUserId)
+                        .get()
+                        .addOnSuccessListener { documents ->
+                            val assignedTrucks = documents.mapNotNull {
+                                it.toObject(TruckModel::class.java)
+                            }
+
+                            if (assignedTrucks.isNotEmpty()) {
+                                binding.btnGetStarted.isEnabled = false
+                                binding.btnGetStarted.alpha = 0.5f
+
+                                replaceFragment(LocationSharingFragment().apply {
+                                    arguments = Bundle().apply {
+                                        putString("selectedTruckId", assignedTrucks.first().id)
+                                    }
+                                })
+                            } else {
+                                val isEnabled = user.accountStatus == AccountStatusModel.ACTIVE
+                                binding.btnGetStarted.isEnabled = isEnabled
+                                binding.btnGetStarted.alpha = if (isEnabled) 1f else 0.5f
+                            }
                         }
-                    })
+                        .addOnFailureListener { exception ->
+                            exception.printStackTrace()
+                        }
                 } else {
-                    binding.btnGetStarted.isEnabled = true
+                    binding.cardAwaitingApproval.visibility = View.VISIBLE
+                    binding.spinnerTrucks.isEnabled = false
+                    binding.etDestination.isEnabled = false
+                    binding.btnGetStarted.isEnabled = false
+                    binding.btnGetStarted.alpha = 0.5f
                 }
             }
-            .addOnFailureListener { exception ->
-                exception.printStackTrace()
-            }
+        }
     }
 
     @Deprecated("Deprecated in Java")
