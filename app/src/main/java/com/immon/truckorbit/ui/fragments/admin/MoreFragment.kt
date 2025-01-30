@@ -32,6 +32,16 @@ class MoreFragment : BaseFragment() {
             MainActivity.replaceFragment(LandingFragment())
         }
 
+        binding.showIdleTrucksSwitch.isChecked = LocalDB.getBoolean("show_idle_trucks", true)
+        binding.showIdleTrucksSwitch.setOnCheckedChangeListener { _, isChecked ->
+            LocalDB.putBoolean("show_idle_trucks", isChecked)
+        }
+
+        binding.showAdminsSwitch.isChecked = LocalDB.getBoolean("show_admins", false)
+        binding.showAdminsSwitch.setOnCheckedChangeListener { _, isChecked ->
+            LocalDB.putBoolean("show_admins", isChecked)
+        }
+
         return binding.root
     }
 }

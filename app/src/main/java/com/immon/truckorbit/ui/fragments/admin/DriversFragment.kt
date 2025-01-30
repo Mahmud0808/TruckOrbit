@@ -14,6 +14,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
 import com.immon.truckorbit.R
 import com.immon.truckorbit.data.Constants.USER_DATABASE
+import com.immon.truckorbit.data.LocalDB
 import com.immon.truckorbit.data.enums.AccountTypeModel
 import com.immon.truckorbit.data.models.UserModel
 import com.immon.truckorbit.databinding.FragmentDriversBinding
@@ -84,9 +85,11 @@ class DriversFragment : BaseFragment() {
 
             if (snapshots != null) {
                 driverList.clear()
+                val showAdmins = LocalDB.getBoolean("show_admins", false)
+
                 for (document in snapshots) {
                     val user = document.toObject<UserModel>()
-                    if (user.accountType == AccountTypeModel.DRIVER) {
+                    if (showAdmins || user.accountType == AccountTypeModel.DRIVER) {
                         driverList.add(user)
                     }
                 }

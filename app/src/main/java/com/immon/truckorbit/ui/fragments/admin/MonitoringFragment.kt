@@ -34,6 +34,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.immon.truckorbit.R
 import com.immon.truckorbit.TruckOrbit.getAppContext
 import com.immon.truckorbit.data.Constants.TRUCK_DATABASE
+import com.immon.truckorbit.data.LocalDB
 import com.immon.truckorbit.data.enums.DrivingStatusModel
 import com.immon.truckorbit.data.models.TruckModel
 import com.immon.truckorbit.databinding.FragmentMonitoringBinding
@@ -210,9 +211,13 @@ class MonitoringFragment : BaseFragment() {
                 }
 
                 val truckList = mutableListOf<TruckModel>()
+                val showIdleTrucks = LocalDB.getBoolean("show_idle_trucks", true)
+
                 for (document in querySnapshot?.documents ?: emptyList()) {
                     val truck = document.toObject(TruckModel::class.java)
                     if (truck?.location != null) {
+                        if (!showIdleTrucks && truck.drivingStatus == DrivingStatusModel.IDLE) continue
+
                         truckList.add(truck)
                     }
                 }
