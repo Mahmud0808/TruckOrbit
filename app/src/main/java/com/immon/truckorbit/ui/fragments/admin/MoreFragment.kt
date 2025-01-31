@@ -17,6 +17,7 @@ import com.immon.truckorbit.data.models.UserModel
 import com.immon.truckorbit.databinding.FragmentMoreBinding
 import com.immon.truckorbit.ui.activities.MainActivity
 import com.immon.truckorbit.ui.fragments.LandingFragment
+import com.immon.truckorbit.ui.fragments.admin.MainFragment.Companion.replaceFragment
 import com.immon.truckorbit.ui.fragments.base.BaseFragment
 import com.immon.truckorbit.utils.applyWindowInsets
 
@@ -64,7 +65,7 @@ class MoreFragment : BaseFragment() {
         }
 
         binding.dashboardLayout.setOnClickListener {
-            // TODO: Add dashboard
+            replaceFragment(DashboardFragment())
         }
 
         binding.reportIssueLayout.setOnClickListener {

@@ -161,7 +161,8 @@ class MainFragment : Fragment() {
         }
 
         private fun isInGroup4(fragment: Fragment): Boolean {
-            return fragment is MoreFragment
+            return fragment is MoreFragment ||
+                    fragment is DashboardFragment
         }
 
         private fun getSlidingDirection(
