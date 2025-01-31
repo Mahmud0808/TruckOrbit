@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:text="John Doe"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -56,12 +56,11 @@
                 android:layout_height="wrap_content"
                 android:text="TqOgI@example.com"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
