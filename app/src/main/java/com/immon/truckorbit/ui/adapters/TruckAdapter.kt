@@ -12,7 +12,10 @@ import com.immon.truckorbit.R
 import com.immon.truckorbit.data.enums.DrivingStatusModel
 import com.immon.truckorbit.data.models.TruckModel
 
-class TruckAdapter(private var truckList: List<TruckModel>) :
+class TruckAdapter(
+    private var truckList: List<TruckModel>,
+    private val onItemClick: (String) -> Unit
+) :
     RecyclerView.Adapter<TruckAdapter.TruckViewHolder>() {
 
     class TruckViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -51,6 +54,10 @@ class TruckAdapter(private var truckList: List<TruckModel>) :
                 DrivingStatusModel.STOPPED -> Color.RED
             }
         )
+
+        holder.itemView.setOnClickListener {
+            onItemClick(truck.id)
+        }
     }
 
     override fun getItemCount(): Int = truckList.size

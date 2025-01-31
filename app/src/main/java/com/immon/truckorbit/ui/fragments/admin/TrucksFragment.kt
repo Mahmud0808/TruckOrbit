@@ -18,6 +18,7 @@ import com.immon.truckorbit.data.Constants.TRUCK_DATABASE
 import com.immon.truckorbit.data.models.TruckModel
 import com.immon.truckorbit.databinding.FragmentTrucksBinding
 import com.immon.truckorbit.ui.adapters.TruckAdapter
+import com.immon.truckorbit.ui.fragments.admin.MainFragment.Companion.replaceFragment
 import com.immon.truckorbit.ui.fragments.base.BaseFragment
 import com.immon.truckorbit.utils.setTitle
 
@@ -61,7 +62,13 @@ class TrucksFragment : BaseFragment() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        truckAdapter = TruckAdapter(emptyList())
+        truckAdapter = TruckAdapter(emptyList()) {
+            replaceFragment(TruckInfoFragment().apply {
+                arguments = Bundle().apply {
+                    putString("truckId", it)
+                }
+            })
+        }
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = truckAdapter
 
