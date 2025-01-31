@@ -113,12 +113,12 @@
 
                 </LinearLayout>
 
-                <View
+                <include
+                    layout="@layout/view_divider"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginStart="76dp"
-                    android:layout_marginEnd="24dp"
-                    android:background="#F2F4F5" />
+                    android:layout_marginEnd="24dp" />
 
                 <LinearLayout
                     android:id="@+id/show_admins_layout"
@@ -156,12 +156,12 @@
 
                 </LinearLayout>
 
-                <View
+                <include
+                    layout="@layout/view_divider"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginStart="76dp"
-                    android:layout_marginEnd="24dp"
-                    android:background="#F2F4F5" />
+                    android:layout_marginEnd="24dp" />
 
                 <LinearLayout
                     android:id="@+id/dashboard_layout"
@@ -198,12 +198,12 @@
 
                 </LinearLayout>
 
-                <View
+                <include
+                    layout="@layout/view_divider"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginStart="76dp"
-                    android:layout_marginEnd="24dp"
-                    android:background="#F2F4F5" />
+                    android:layout_marginEnd="24dp" />
 
                 <LinearLayout
                     android:id="@+id/report_issue_layout"
@@ -276,12 +276,12 @@
 
                 </LinearLayout>
 
-                <View
+                <include
+                    layout="@layout/view_divider"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginStart="76dp"
-                    android:layout_marginEnd="24dp"
-                    android:background="#F2F4F5" />
+                    android:layout_marginEnd="24dp" />
 
                 <LinearLayout
                     android:id="@+id/help_layout"
