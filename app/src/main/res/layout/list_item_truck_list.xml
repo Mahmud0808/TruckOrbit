@@ -12,7 +12,7 @@
         android:baselineAligned="false"
         android:orientation="horizontal"
         android:paddingHorizontal="24dp"
-        android:paddingVertical="12dp">
+        android:paddingVertical="18dp">
 
         <FrameLayout
             android:layout_width="wrap_content"
