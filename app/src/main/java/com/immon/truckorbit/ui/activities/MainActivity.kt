@@ -120,8 +120,8 @@ class MainActivity : AppCompatActivity() {
                         )
                     }
 
-                    !is LandingFragment -> {
-                        addToBackStack("OnboardFragment")
+                    else -> {
+                        addToBackStack(fragment.javaClass.simpleName)
                     }
                 }
 

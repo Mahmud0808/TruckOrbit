@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -39,10 +40,12 @@ import com.immon.truckorbit.data.enums.DrivingStatusModel
 import com.immon.truckorbit.data.models.TruckModel
 import com.immon.truckorbit.data.models.UserModel
 import com.immon.truckorbit.databinding.FragmentLocationSharingBinding
+import com.immon.truckorbit.ui.activities.MainActivity.Companion.myFragmentManager
 import com.immon.truckorbit.ui.fragments.base.BaseFragment
 import com.immon.truckorbit.utils.AnimationQueue
 import com.immon.truckorbit.utils.applyWindowInsets
 import java.util.UUID
+
 
 class LocationSharingFragment : BaseFragment() {
 
@@ -52,6 +55,7 @@ class LocationSharingFragment : BaseFragment() {
     private lateinit var locationCallback: LocationCallback
     private lateinit var animationQueue: AnimationQueue
     private lateinit var selectedTruckId: String
+    private var disableBackButton = true
     private val firestore = FirebaseFirestore.getInstance()
     private var googleMap: GoogleMap? = null
     private var currentMarker: Marker? = null
@@ -91,6 +95,18 @@ class LocationSharingFragment : BaseFragment() {
         binding.btnStopDriving.setOnClickListener {
             updateDrivingStatus(false)
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (!disableBackButton) {
+                        isEnabled = false
+                        requireActivity().onBackPressed()
+                    }
+                }
+            }
+        )
 
         return binding.root
     }
@@ -148,9 +164,10 @@ class LocationSharingFragment : BaseFragment() {
             val userModel = userSnapshot.toObject(UserModel::class.java)
                 ?: throw IllegalStateException("User not found")
 
-            truckModel.drivingStatus =
+            val drivingStatus =
                 if (isDriving) DrivingStatusModel.DRIVING else DrivingStatusModel.STOPPED
-            userModel.drivingStatus = truckModel.drivingStatus
+            truckModel.drivingStatus = drivingStatus
+            userModel.drivingStatus = drivingStatus
 
             if (!isDriving) {
                 truckModel.currentDriver = null
@@ -173,7 +190,9 @@ class LocationSharingFragment : BaseFragment() {
             } else {
                 binding.btnStartDriving.visibility = View.INVISIBLE
                 binding.btnStopDriving.visibility = View.INVISIBLE
-                requireActivity().onBackPressed()
+
+                disableBackButton = false
+                myFragmentManager.popBackStackImmediate()
             }
 
             binding.btnStartDriving.revertAnimation()
