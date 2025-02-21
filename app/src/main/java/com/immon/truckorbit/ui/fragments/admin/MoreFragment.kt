@@ -10,6 +10,7 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
+import com.immon.truckorbit.data.Constants.DEV_HELP_SUPPORT
 import com.immon.truckorbit.data.Constants.DEV_MAIL_ADDRESS
 import com.immon.truckorbit.data.Constants.USER_DATABASE
 import com.immon.truckorbit.data.LocalDB
@@ -91,7 +92,7 @@ class MoreFragment : BaseFragment() {
 
         binding.helpLayout.setOnClickListener {
             try {
-                startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.facebook.com/immon.abeer.5#")))
+                startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(DEV_HELP_SUPPORT)))
             } catch (e: Exception) {
                 Toast.makeText(requireContext(), "Unable to open link", Toast.LENGTH_SHORT).show()
             }
